@@ -1,4 +1,4 @@
-# CLAUDE.md - [Your Project Name]
+# CLAUDE.md - Olunia
 
 This file provides context for Claude (AI assistant) when working on this codebase.
 
@@ -12,26 +12,39 @@ This file provides context for Claude (AI assistant) when working on this codeba
 > **IMPORTANT: First-time setup!**
 > Run `/setup-alpacapps-infra` to set up the full infrastructure interactively.
 > If the Supabase CLI is not installed or linked, run:
-> `npm install -g supabase && supabase login && supabase link --project-ref YOUR_REF`
+> `npm install -g supabase && supabase login && supabase link --project-ref rezhazgfllcyaeuemppw`
 
 ## Project Overview
 
-[Your project] is a [type of system] for [purpose]. It manages [core entities].
+Olunia is a personal portfolio for Ola — designer, UI/UX developer, and artist. It showcases projects, artwork, and creative work.
+
+**Core Entities:** projects, contact messages
 
 **Tech Stack:**
-- Frontend: Next.js 16 (React 19, TypeScript, Tailwind CSS)
+- Frontend: Next.js 16 (React 19, TypeScript, Tailwind CSS v4)
 - Backend: Supabase (PostgreSQL + Storage + Auth)
 - Hosting: GitHub Pages (static export)
-- i18n: Dictionary-based multi-language support
+- i18n: Dictionary-based multi-language support (en, es, fr)
 
 **Live URLs:**
-- Public site: https://USERNAME.github.io/REPO/
-- Intranet: https://USERNAME.github.io/REPO/en/intranet/
+- Public site: https://grotkoaleksandra.github.io/olunia/
+- Intranet: https://grotkoaleksandra.github.io/olunia/en/intranet/
 
 ## Deployment
 
 Push to main and it's live. No build step, no PR process.
 **For Claude:** Always push changes immediately.
+
+## Database Schema
+
+### `projects`
+Portfolio pieces — title, slug, description, category, client_name, cover_image_url, gallery_urls[], tags[], featured, sort_order, is_archived, published_at
+
+### `contact_messages`
+Contact form submissions — name, email, subject, message, is_read
+
+### `page_display_config`
+Intranet tab visibility — section, tab_key, tab_label, is_visible, sort_order
 
 ## Shared Files
 
@@ -56,12 +69,6 @@ Provides login/profile functionality on all pages:
 <script src="shared/auth.js"></script>
 ```
 
-**`shared/supabase.js` must export globals** (auth.js reads these):
-```javascript
-var SUPABASE_URL = 'https://YOUR_REF.supabase.co';
-var SUPABASE_ANON_KEY = 'your-anon-key';
-```
-
 ### Admin Pages (`admin/`)
 
 - All admin pages are in `admin/` directory with `<meta name="robots" content="noindex, nofollow">`
@@ -77,14 +84,15 @@ requireAuth(function(user, supabase) {
 
 ## Supabase Details
 
-- Project ID: `YOUR_PROJECT_REF`
-- URL: `https://YOUR_PROJECT_REF.supabase.co`
+- Project ID: `rezhazgfllcyaeuemppw`
+- URL: `https://rezhazgfllcyaeuemppw.supabase.co`
+- Region: Central EU (Frankfurt)
 - Anon key is in `src/lib/supabase.ts` and `shared/supabase.js`
 
 ### Direct Database Access (for Claude)
 
 ```bash
-psql "postgres://postgres.YOUR_REF:YOUR_PASSWORD@aws-0-REGION.pooler.supabase.com:5432/postgres" -c "SQL HERE"
+/opt/homebrew/opt/libpq/bin/psql "postgres://postgres.rezhazgfllcyaeuemppw:jfjKwHf6GVXXMAmzEvGHXEAw@aws-0-eu-central-1.pooler.supabase.com:6543/postgres" -c "SQL HERE"
 ```
 
 ### Supabase CLI Access (for Claude)
@@ -110,18 +118,6 @@ Run these directly. If CLI not installed, install and link first.
 
 ### Email (Resend)
 - API key stored as Supabase secret: `RESEND_API_KEY`
-
-### SMS (Telnyx)
-- Config in `telnyx_config` table
-- Edge functions: `send-sms`, `telnyx-webhook` (deploy with `--no-verify-jwt`)
-
-### Payments (Square)
-- Config in `square_config` table
-- Edge function: `process-square-payment`
-
-### E-Signatures (SignWell)
-- Config in `signwell_config` table
-- Edge function: `signwell-webhook` (deploy with `--no-verify-jwt`)
 
 ## Conventions
 
