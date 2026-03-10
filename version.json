@@ -1,9 +1,9 @@
 {
-  "version": "v260310.01 9:07am",
-  "release": 1,
-  "sha": "9520bc9",
-  "fullSha": "9520bc903119e94e1c1278bdc5b6d84ea0dd1da4",
+  "version": "v260310.02 10:18am",
+  "release": 2,
+  "sha": "b9b4a2c",
+  "fullSha": "b9b4a2c9acce4bb1e2d67d25b9676c8973c1c0d7",
   "actor": "grotkoaleksandra",
-  "pushedAt": "2026-03-10T14:07:56Z",
-  "commits": [{"sha": "9520bc9", "message": "feat: connect Supabase project and create portfolio tables", "author": "MICHAEL KARNOW"}]
+  "pushedAt": "2026-03-10T15:18:56Z",
+  "commits": [{"sha": "b9b4a2c", "message": "feat: add Resend email edge function for contact notifications", "author": "MICHAEL KARNOW"}]
 }
