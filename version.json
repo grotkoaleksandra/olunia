@@ -1,9 +1,9 @@
 {
-  "version": "v260712.02 8:18am",
-  "release": 2,
-  "sha": "3e0c602",
-  "fullSha": "3e0c6029fbf02b8a90663c90392031f473059ba7",
+  "version": "v260712.03 8:43am",
+  "release": 3,
+  "sha": "b69066a",
+  "fullSha": "b69066a13f43fc982874c23c127f7aa1261d4afc",
   "actor": "grotkoaleksandra",
-  "pushedAt": "2026-07-12T13:18:59Z",
-  "commits": [{"sha": "3e0c602", "message": "docs: document social media tables and Actions-based Pages deployment", "author": "MICHAEL KARNOW"}]
+  "pushedAt": "2026-07-12T13:43:09Z",
+  "commits": [{"sha": "b69066a", "message": "design: editorial redesign of intranet and social media section", "author": "MICHAEL KARNOW"}]
 }
