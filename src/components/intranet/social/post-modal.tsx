@@ -26,6 +26,12 @@ interface PostModalProps {
   post: SocialPost | null;
   /** Prefill for the scheduled date when creating from the calendar (YYYY-MM-DD). */
   defaultDate?: string | null;
+  /** Prefill from a weekly-plan slot when creating from a ghost entry. */
+  defaultSlot?: {
+    title: string;
+    platform: SocialPlatform;
+    time: string | null; // "HH:MM"
+  } | null;
   onSave: (values: PostFormValues, id?: string) => Promise<void>;
   onDelete?: (id: string) => Promise<void>;
   onClose: () => void;
@@ -43,14 +49,15 @@ function toLocalInputValue(iso: string | null): string {
 export function PostModal({
   post,
   defaultDate,
+  defaultSlot,
   onSave,
   onDelete,
   onClose,
 }: PostModalProps) {
-  const [title, setTitle] = useState(post?.title || "");
+  const [title, setTitle] = useState(post?.title || defaultSlot?.title || "");
   const [content, setContent] = useState(post?.content || "");
   const [platform, setPlatform] = useState<SocialPlatform>(
-    post?.platform || "instagram"
+    post?.platform || defaultSlot?.platform || "instagram"
   );
   const [status, setStatus] = useState<SocialPostStatus>(
     post?.status || (defaultDate ? "scheduled" : "draft")
@@ -59,7 +66,7 @@ export function PostModal({
     post?.scheduled_at
       ? toLocalInputValue(post.scheduled_at)
       : defaultDate
-      ? `${defaultDate}T12:00`
+      ? `${defaultDate}T${defaultSlot?.time || "12:00"}`
       : ""
   );
   const [postUrl, setPostUrl] = useState(post?.post_url || "");

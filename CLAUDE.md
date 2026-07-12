@@ -57,6 +57,12 @@ Per-post engagement snapshots (manually recorded) — post_id, likes, comments, 
 ### `social_account_stats`
 Follower-count snapshots per platform for growth tracking — platform, followers, recorded_at
 
+### `social_weekly_slots`
+Recurring weekly content plan — weekday (0=Mon), title, platform, time_of_day, notes, sort_order
+
+### `social_settings`
+Key-value settings (JSONB) — e.g. `weekly_plan_monthly` toggles projecting the weekly plan onto the calendar
+
 ## Shared Files
 
 - `shared/supabase.js` — Supabase client init (URL + anon key as globals)

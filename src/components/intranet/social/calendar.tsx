@@ -2,7 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useSocialPosts } from "@/hooks/use-social-posts";
-import { PLATFORM_META, PLATFORMS, type SocialPost } from "@/types/social";
+import { useWeeklyPlan } from "@/hooks/use-weekly-plan";
+import {
+  PLATFORM_META,
+  PLATFORMS,
+  type SocialPost,
+  type WeeklySlot,
+} from "@/types/social";
 import { PostModal, type PostFormValues } from "./post-modal";
 import { Toast, useToast } from "./toast";
 
@@ -15,6 +21,7 @@ function localDateKey(d: Date): string {
 
 export function SocialCalendar() {
   const { posts, loading, error, savePost, deletePost } = useSocialPosts();
+  const { slots, monthly } = useWeeklyPlan();
   const { toast, showToast } = useToast();
 
   const today = new Date();
@@ -22,6 +29,7 @@ export function SocialCalendar() {
   const [month, setMonth] = useState(today.getMonth());
   const [editingPost, setEditingPost] = useState<SocialPost | null>(null);
   const [newPostDate, setNewPostDate] = useState<string | null>(null);
+  const [slotPrefill, setSlotPrefill] = useState<WeeklySlot | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   const postsByDay = useMemo(() => {
@@ -59,15 +67,40 @@ export function SocialCalendar() {
     setMonth(d.getMonth());
   };
 
+  // Ghost entries: with "repeat monthly" on, weekly-plan slots appear on every
+  // matching weekday. A slot is hidden once a real post with the same title
+  // and platform exists on that day (i.e., it has been turned into a post).
+  const ghostsForDay = (date: Date): WeeklySlot[] => {
+    if (!monthly) return [];
+    const weekday = (date.getDay() + 6) % 7; // Monday = 0
+    const dayPosts = postsByDay.get(localDateKey(date)) || [];
+    return slots.filter(
+      (s) =>
+        s.weekday === weekday &&
+        !dayPosts.some(
+          (p) => p.platform === s.platform && p.title === s.title
+        )
+    );
+  };
+
   const openNew = (dateKey: string | null) => {
     setEditingPost(null);
     setNewPostDate(dateKey);
+    setSlotPrefill(null);
+    setModalOpen(true);
+  };
+
+  const openFromSlot = (dateKey: string, slot: WeeklySlot) => {
+    setEditingPost(null);
+    setNewPostDate(dateKey);
+    setSlotPrefill(slot);
     setModalOpen(true);
   };
 
   const openEdit = (post: SocialPost) => {
     setEditingPost(post);
     setNewPostDate(null);
+    setSlotPrefill(null);
     setModalOpen(true);
   };
 
@@ -91,17 +124,22 @@ export function SocialCalendar() {
     }
   };
 
-  // Agenda list for small screens: this month's scheduled posts grouped by day
+  // Agenda list for small screens: this month's scheduled posts (and ghost
+  // slots from the weekly plan) grouped by day
   const agendaDays = useMemo(() => {
-    const days: { date: Date; posts: SocialPost[] }[] = [];
+    const days: { date: Date; posts: SocialPost[]; ghosts: WeeklySlot[] }[] =
+      [];
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(year, month, d);
       const dayPosts = postsByDay.get(localDateKey(date)) || [];
-      if (dayPosts.length > 0) days.push({ date, posts: dayPosts });
+      const ghosts = ghostsForDay(date);
+      if (dayPosts.length > 0 || ghosts.length > 0)
+        days.push({ date, posts: dayPosts, ghosts });
     }
     return days;
-  }, [year, month, postsByDay]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [year, month, postsByDay, slots, monthly]);
 
   const monthName = new Date(year, month, 1).toLocaleDateString("en", {
     month: "long",
@@ -159,7 +197,7 @@ export function SocialCalendar() {
             Nothing scheduled this month.
           </p>
         ) : (
-          agendaDays.map(({ date, posts: dayPosts }) => {
+          agendaDays.map(({ date, posts: dayPosts, ghosts }) => {
             const key = localDateKey(date);
             const isToday = key === todayKey;
             return (
@@ -196,6 +234,23 @@ export function SocialCalendar() {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                  {ghosts.map((slot) => (
+                    <button
+                      key={`ghost-${slot.id}`}
+                      onClick={() => openFromSlot(key, slot)}
+                      className="block w-full border-l-2 border-dashed pl-2.5 text-left text-sm font-display italic text-stone-400 hover:text-ink transition-colors"
+                      style={{
+                        borderLeftColor: `${PLATFORM_META[slot.platform].color}80`,
+                      }}
+                    >
+                      {slot.title}
+                      {slot.time_of_day && (
+                        <span className="text-xs not-italic font-sans tabular-nums ml-2">
+                          {slot.time_of_day.slice(0, 5)}
                         </span>
                       )}
                     </button>
@@ -270,6 +325,22 @@ export function SocialCalendar() {
                       {post.title}
                     </button>
                   ))}
+                  {ghostsForDay(date).map((slot) => (
+                    <button
+                      key={`ghost-${slot.id}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openFromSlot(key, slot);
+                      }}
+                      className="block w-full truncate border-l-2 border-dashed pl-1.5 text-left text-[11px] leading-tight font-display italic text-stone-400 hover:text-ink transition-colors"
+                      style={{
+                        borderLeftColor: `${PLATFORM_META[slot.platform].color}80`,
+                      }}
+                      title={`Weekly plan — ${PLATFORM_META[slot.platform].label}: ${slot.title}`}
+                    >
+                      {slot.title}
+                    </button>
+                  ))}
                 </div>
               </div>
             );
@@ -323,6 +394,15 @@ export function SocialCalendar() {
         <PostModal
           post={editingPost}
           defaultDate={newPostDate}
+          defaultSlot={
+            slotPrefill
+              ? {
+                  title: slotPrefill.title,
+                  platform: slotPrefill.platform,
+                  time: slotPrefill.time_of_day?.slice(0, 5) || null,
+                }
+              : null
+          }
           onSave={handleSave}
           onDelete={handleDelete}
           onClose={() => setModalOpen(false)}

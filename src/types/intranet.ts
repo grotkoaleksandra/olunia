@@ -36,6 +36,7 @@ export const SECTIONS: SectionDefinition[] = [
 export const DEFAULT_TABS: Record<IntranetSection, TabDefinition[]> = {
   social: [
     { key: "calendar", label: "Calendar", defaultVisible: true },
+    { key: "weekly", label: "Weekly Plan", defaultVisible: true },
     { key: "posts", label: "Posts", defaultVisible: true },
     { key: "analytics", label: "Analytics", defaultVisible: true },
   ],

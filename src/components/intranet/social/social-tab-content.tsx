@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { SocialCalendar } from "./calendar";
 import { SocialPosts } from "./posts";
 import { SocialAnalytics } from "./analytics";
+import { WeeklyPlan } from "./weekly-plan";
 
 export function SocialTabContent() {
   const params = useParams();
@@ -12,6 +13,8 @@ export function SocialTabContent() {
   switch (tab) {
     case "calendar":
       return <SocialCalendar />;
+    case "weekly":
+      return <WeeklyPlan />;
     case "posts":
       return <SocialPosts />;
     case "analytics":

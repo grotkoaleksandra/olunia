@@ -76,6 +76,29 @@ export const STATUSES: { key: SocialPostStatus; label: string }[] = [
   { key: "published", label: "Published" },
 ];
 
+export interface WeeklySlot {
+  id: string;
+  /** 0 = Monday … 6 = Sunday */
+  weekday: number;
+  title: string;
+  platform: SocialPlatform;
+  /** "HH:MM:SS" or null */
+  time_of_day: string | null;
+  notes: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
+export const WEEKDAY_NAMES = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
 /** Sum of interactions used as the engagement numerator. */
 export function engagementOf(m: SocialMetric): number {
   return m.likes + m.comments + m.shares + m.saves;
