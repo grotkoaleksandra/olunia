@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
+    },
+    {
+      "name": "olunia-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "out", "-l", "3999"],
+      "port": 3999
     }
   ]
 }

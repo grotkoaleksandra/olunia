@@ -95,7 +95,7 @@ export function SocialPosts() {
     <div>
       <p className="microcaps text-stone-400 mb-2">Social Media</p>
       <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
-        <h1 className="font-display font-light text-5xl text-ink leading-none">
+        <h1 className="font-display font-light text-4xl sm:text-5xl text-ink leading-none">
           Posts
         </h1>
         <div className="flex flex-wrap items-end gap-8">

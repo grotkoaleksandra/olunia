@@ -453,7 +453,7 @@ export function SocialAnalytics() {
   return (
     <div>
       <p className="microcaps text-stone-400 mb-2">Social Media</p>
-      <h1 className="font-display font-light text-5xl text-ink leading-none mb-10">
+      <h1 className="font-display font-light text-4xl sm:text-5xl text-ink leading-none mb-10">
         Analytics
       </h1>
 

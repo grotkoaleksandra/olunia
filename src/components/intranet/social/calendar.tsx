@@ -91,6 +91,18 @@ export function SocialCalendar() {
     }
   };
 
+  // Agenda list for small screens: this month's scheduled posts grouped by day
+  const agendaDays = useMemo(() => {
+    const days: { date: Date; posts: SocialPost[] }[] = [];
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(year, month, d);
+      const dayPosts = postsByDay.get(localDateKey(date)) || [];
+      if (dayPosts.length > 0) days.push({ date, posts: dayPosts });
+    }
+    return days;
+  }, [year, month, postsByDay]);
+
   const monthName = new Date(year, month, 1).toLocaleDateString("en", {
     month: "long",
   });
@@ -103,9 +115,9 @@ export function SocialCalendar() {
   return (
     <div>
       <p className="microcaps text-stone-400 mb-2">Social Media</p>
-      <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
+      <div className="flex flex-wrap items-end justify-between gap-6 mb-8 sm:mb-10">
         <div className="flex items-baseline gap-5">
-          <h1 className="font-display font-light text-5xl text-ink leading-none">
+          <h1 className="font-display font-light text-4xl sm:text-5xl text-ink leading-none">
             {monthName}{" "}
             <span className="italic text-stone-400">{year}</span>
           </h1>
@@ -140,7 +152,62 @@ export function SocialCalendar() {
         </div>
       )}
 
-      <div className="border-t border-hairline">
+      {/* Agenda list on small screens; the 7-column grid needs more width */}
+      <div className="sm:hidden border-t border-hairline">
+        {agendaDays.length === 0 ? (
+          <p className="font-display italic text-lg text-stone-400 pt-8 text-center">
+            Nothing scheduled this month.
+          </p>
+        ) : (
+          agendaDays.map(({ date, posts: dayPosts }) => {
+            const key = localDateKey(date);
+            const isToday = key === todayKey;
+            return (
+              <div key={key} className="border-b border-hairline py-4">
+                <div className="flex items-baseline gap-3 mb-2">
+                  <span
+                    className={`font-display text-2xl tabular-nums ${
+                      isToday ? "italic text-ink" : "text-ink"
+                    }`}
+                  >
+                    {date.getDate()}
+                  </span>
+                  <span className="microcaps text-[10px] text-stone-400">
+                    {date.toLocaleDateString("en", { weekday: "long" })}
+                    {isToday && " — today"}
+                  </span>
+                </div>
+                <div className="space-y-2 pl-0.5">
+                  {dayPosts.map((post) => (
+                    <button
+                      key={post.id}
+                      onClick={() => openEdit(post)}
+                      className={`block w-full border-l-2 pl-2.5 text-left text-sm text-ink ${
+                        post.status === "published" ? "opacity-45" : ""
+                      }`}
+                      style={{
+                        borderLeftColor: PLATFORM_META[post.platform].color,
+                      }}
+                    >
+                      {post.title}
+                      {post.scheduled_at && (
+                        <span className="text-xs text-stone-400 tabular-nums ml-2">
+                          {new Date(post.scheduled_at).toLocaleTimeString("en", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      <div className="hidden sm:block border-t border-hairline">
         <div className="grid grid-cols-7">
           {WEEKDAYS.map((day) => (
             <div
