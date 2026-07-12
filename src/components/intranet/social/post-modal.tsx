@@ -101,35 +101,35 @@ export function PostModal({
   };
 
   const inputClass =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500";
-  const labelClass = "block text-sm font-medium text-slate-700 mb-1";
+    "w-full bg-transparent border-0 border-b border-stone-300 px-0 py-2 text-sm text-ink placeholder:text-stone-300 focus:outline-none focus:border-ink transition-colors";
+  const labelClass = "microcaps text-[10px] text-stone-500 block mb-1";
 
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 p-4"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-ink/25 backdrop-blur-[2px] p-4"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-xl bg-white p-6 shadow-xl"
+        className="w-full max-w-lg max-h-[90vh] overflow-y-auto bg-paper border border-ink p-8 shadow-[8px_8px_0_rgba(28,27,26,0.12)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-bold text-slate-900 mb-4">
-          {post ? "Edit Post" : "New Post"}
+        <h2 className="font-display italic text-3xl font-light text-ink mb-8">
+          {post ? "Edit post" : "New post"}
         </h2>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div>
             <label className={labelClass}>Title *</label>
             <input
-              className={inputClass}
+              className={`${inputClass} font-display text-lg`}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. New illustration series teaser"
+              placeholder="New illustration series teaser"
               autoFocus
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-8">
             <div>
               <label className={labelClass}>Platform</label>
               <select
@@ -178,15 +178,15 @@ export function PostModal({
             <label className={labelClass}>Caption / content</label>
             <textarea
               className={inputClass}
-              rows={4}
+              rows={3}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Post caption, hashtags..."
+              placeholder="Post caption, hashtags…"
             />
           </div>
 
           <div>
-            <label className={labelClass}>Tags (comma-separated)</label>
+            <label className={labelClass}>Tags — comma separated</label>
             <input
               className={inputClass}
               value={tags}
@@ -196,12 +196,12 @@ export function PostModal({
           </div>
 
           <div>
-            <label className={labelClass}>Post URL (after publishing)</label>
+            <label className={labelClass}>Post URL — after publishing</label>
             <input
               className={inputClass}
               value={postUrl}
               onChange={(e) => setPostUrl(e.target.value)}
-              placeholder="https://..."
+              placeholder="https://…"
             />
           </div>
 
@@ -212,41 +212,41 @@ export function PostModal({
               rows={2}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Ideas, assets to prepare..."
+              placeholder="Ideas, assets to prepare…"
             />
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-between">
+        <div className="mt-10 flex items-center justify-between">
           <div>
             {post && onDelete && (
               <button
                 onClick={() =>
                   confirmingDelete ? onDelete(post.id) : setConfirmingDelete(true)
                 }
-                className={`text-sm font-medium ${
+                className={`microcaps transition-colors ${
                   confirmingDelete
-                    ? "text-white bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg"
-                    : "text-red-600 hover:text-red-700"
+                    ? "bg-red-900 text-paper px-4 py-2.5"
+                    : "text-red-900/70 hover:text-red-900"
                 }`}
               >
                 {confirmingDelete ? "Confirm delete" : "Delete"}
               </button>
             )}
           </div>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-6">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900"
+              className="microcaps text-stone-500 hover:text-ink transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
               disabled={!title.trim() || saving}
-              className="px-5 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white rounded-lg text-sm font-medium transition-colors"
+              className="microcaps bg-ink text-paper px-6 py-3 hover:bg-stone-700 disabled:opacity-40 transition-colors"
             >
-              {saving ? "Saving..." : "Save"}
+              {saving ? "Saving…" : "Save"}
             </button>
           </div>
         </div>

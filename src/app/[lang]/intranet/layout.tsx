@@ -9,7 +9,7 @@ import type { ReactNode } from "react";
 export default function IntranetLayout({ children }: { children: ReactNode }) {
   return (
     <AuthGuard>
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex flex-col min-h-screen bg-paper text-ink">
         <IntranetHeader />
         <SectionTabs />
         <SubTabs />

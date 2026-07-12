@@ -7,14 +7,21 @@ import {
   PLATFORM_META,
   PLATFORMS,
   STATUSES,
-  STATUS_STYLES,
   engagementOf,
   type SocialMetric,
   type SocialPost,
+  type SocialPostStatus,
 } from "@/types/social";
 import { PostModal, type PostFormValues } from "./post-modal";
 import { MetricsModal } from "./metrics-modal";
 import { Toast, useToast } from "./toast";
+
+const STATUS_GLYPH: Record<SocialPostStatus, string> = {
+  idea: "◌",
+  draft: "◔",
+  scheduled: "◑",
+  published: "●",
+};
 
 export function SocialPosts() {
   const { posts, loading, error, savePost, deletePost } = useSocialPosts();
@@ -78,17 +85,20 @@ export function SocialPosts() {
   };
 
   const selectClass =
-    "rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500";
+    "bg-transparent border-0 border-b border-stone-300 px-0 py-2 microcaps text-[10px] text-ink focus:outline-none focus:border-ink transition-colors cursor-pointer";
 
   if (loading) {
-    return <p className="text-slate-500">Loading posts...</p>;
+    return <p className="text-sm text-stone-400">Loading posts…</p>;
   }
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">Posts</h1>
-        <div className="flex flex-wrap items-center gap-3">
+      <p className="microcaps text-stone-400 mb-2">Social Media</p>
+      <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
+        <h1 className="font-display font-light text-5xl text-ink leading-none">
+          Posts
+        </h1>
+        <div className="flex flex-wrap items-end gap-8">
           <select
             className={selectClass}
             value={platformFilter}
@@ -118,33 +128,35 @@ export function SocialPosts() {
               setEditingPost(null);
               setModalOpen(true);
             }}
-            className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-medium transition-colors"
+            className="microcaps bg-ink text-paper px-6 py-3 hover:bg-stone-700 transition-colors"
           >
-            + New Post
+            New Post
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="mb-4 text-sm rounded-lg px-4 py-3 bg-red-50 border border-red-200 text-red-700">
+        <div className="mb-6 text-sm border-l-2 border-ink pl-4 py-1 text-stone-600">
           Could not load posts: {error}
         </div>
       )}
 
       {filtered.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 p-8 text-center text-slate-500">
-          No posts yet. Add your first post to start planning.
+        <div className="border-t border-hairline pt-10 text-center">
+          <p className="font-display italic text-xl text-stone-400">
+            Nothing here yet — add your first post to start planning.
+          </p>
         </div>
       ) : (
-        <div className="rounded-xl border border-slate-200 overflow-x-auto">
-          <table className="w-full min-w-[720px]">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px] border-t-2 border-ink">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
+              <tr className="border-b border-hairline">
                 {["Title", "Platform", "Status", "Scheduled", "Engagement", ""].map(
                   (h, i) => (
                     <th
                       key={i}
-                      className="text-left text-sm font-medium text-slate-700 px-4 py-3"
+                      className="text-left microcaps text-[10px] text-stone-400 py-4 pr-6 font-normal"
                     >
                       {h}
                     </th>
@@ -158,41 +170,50 @@ export function SocialPosts() {
                 return (
                   <tr
                     key={post.id}
-                    className="border-b border-slate-100 last:border-b-0 hover:bg-slate-50/50"
+                    className="border-b border-hairline group"
                   >
-                    <td className="px-4 py-3 text-sm text-slate-900">
+                    <td className="py-5 pr-6">
                       <button
                         onClick={() => {
                           setEditingPost(post);
                           setModalOpen(true);
                         }}
-                        className="font-medium hover:text-amber-700 text-left"
+                        className="font-display text-lg text-ink text-left leading-snug hover:italic"
                       >
                         {post.title}
                       </button>
                       {post.tags.length > 0 && (
-                        <div className="text-xs text-slate-400 mt-0.5">
-                          {post.tags.map((t) => `#${t}`).join(" ")}
+                        <div className="microcaps text-[9px] text-stone-400 mt-1.5">
+                          {post.tags.join(" · ")}
                         </div>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-700 whitespace-nowrap">
+                    <td className="py-5 pr-6 text-sm text-stone-600 whitespace-nowrap">
                       <span
-                        className="inline-block w-2 h-2 rounded-full mr-1.5"
+                        className="inline-block w-2 h-2 rounded-full mr-2"
                         style={{
                           backgroundColor: PLATFORM_META[post.platform].color,
                         }}
                       />
                       {PLATFORM_META[post.platform].label}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="py-5 pr-6 whitespace-nowrap">
                       <span
-                        className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[post.status]}`}
+                        className={`microcaps text-[10px] ${
+                          post.status === "published"
+                            ? "text-ink"
+                            : post.status === "scheduled"
+                            ? "text-stone-600"
+                            : "text-stone-400"
+                        }`}
                       >
+                        <span className="mr-1.5">
+                          {STATUS_GLYPH[post.status]}
+                        </span>
                         {post.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-600 whitespace-nowrap">
+                    <td className="py-5 pr-6 text-sm text-stone-500 tabular-nums whitespace-nowrap">
                       {post.scheduled_at
                         ? new Date(post.scheduled_at).toLocaleString("en", {
                             day: "numeric",
@@ -202,26 +223,26 @@ export function SocialPosts() {
                           })
                         : "—"}
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-600 whitespace-nowrap">
+                    <td className="py-5 pr-6 text-sm text-ink tabular-nums whitespace-nowrap">
                       {metric ? (
                         <span title="likes + comments + shares + saves">
                           {engagementOf(metric).toLocaleString()}
                           {metric.impressions > 0 && (
-                            <span className="text-xs text-slate-400">
+                            <span className="text-xs text-stone-400">
                               {" "}
-                              / {metric.impressions.toLocaleString()} views
+                              / {metric.impressions.toLocaleString()}
                             </span>
                           )}
                         </span>
                       ) : (
-                        "—"
+                        <span className="text-stone-300">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right whitespace-nowrap">
+                    <td className="py-5 text-right whitespace-nowrap">
                       {post.status === "published" && (
                         <button
                           onClick={() => setMetricsPost(post)}
-                          className="text-sm font-medium text-amber-700 hover:text-amber-800 mr-3"
+                          className="microcaps text-[10px] text-stone-500 hover:text-ink transition-colors mr-5"
                         >
                           Stats
                         </button>
@@ -231,7 +252,7 @@ export function SocialPosts() {
                           href={post.post_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm font-medium text-slate-500 hover:text-slate-700"
+                          className="microcaps text-[10px] text-stone-400 hover:text-ink transition-colors"
                         >
                           Open ↗
                         </a>

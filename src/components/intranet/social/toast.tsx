@@ -27,10 +27,10 @@ export function Toast({ toast }: { toast: ToastState | null }) {
   if (!toast) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 rounded-lg px-4 py-3 text-sm shadow-lg border ${
+      className={`fixed bottom-8 right-8 z-50 px-5 py-3.5 text-sm shadow-[6px_6px_0_rgba(28,27,26,0.12)] ${
         toast.type === "success"
-          ? "bg-green-50 border-green-200 text-green-700"
-          : "bg-red-50 border-red-200 text-red-700"
+          ? "bg-ink text-paper"
+          : "bg-red-900 text-paper"
       }`}
     >
       {toast.text}

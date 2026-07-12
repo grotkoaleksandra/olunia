@@ -15,18 +15,32 @@ export default function SocialPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900 mb-4">Social Media</h1>
-      <p className="text-slate-600 mb-6">
-        Plan your content calendar, track posts, and analyze how they perform.
+      <p className="microcaps text-stone-400 mb-2">Social Media</p>
+      <h1 className="font-display font-light text-5xl text-ink leading-none mb-6">
+        Plan, publish,{" "}
+        <span className="italic">measure.</span>
+      </h1>
+      <p className="text-stone-500 max-w-md mb-12">
+        Your content calendar, post archive, and performance — in one place.
       </p>
-      <div className="grid sm:grid-cols-3 gap-4 max-w-2xl">
-        {visibleTabs.map((tab) => (
+      <div className="border-t border-hairline max-w-2xl">
+        {visibleTabs.map((tab, i) => (
           <Link
             key={tab.tab_key}
             href={`/${lang}/intranet/social/${tab.tab_key}`}
-            className="rounded-xl border border-slate-200 p-5 hover:border-amber-400 hover:bg-amber-50/50 transition-colors"
+            className="group flex items-baseline justify-between border-b border-hairline py-5 transition-colors hover:bg-white px-2 -mx-2"
           >
-            <div className="font-semibold text-slate-900">{tab.tab_label}</div>
+            <span className="flex items-baseline gap-5">
+              <span className="font-display italic text-stone-300 text-lg">
+                0{i + 1}
+              </span>
+              <span className="font-display text-2xl text-ink group-hover:italic">
+                {tab.tab_label}
+              </span>
+            </span>
+            <span className="text-stone-300 group-hover:text-ink transition-colors">
+              →
+            </span>
           </Link>
         ))}
       </div>

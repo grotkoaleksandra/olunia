@@ -15,20 +15,22 @@ export function IntranetHeader() {
   };
 
   return (
-    <header className="bg-slate-900 text-white">
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-14">
-        <div className="flex items-center gap-4">
-          <span className="text-lg font-bold">Intranet</span>
-          <span className="text-xs text-slate-400">v0.1.0</span>
+    <header className="bg-paper border-b border-hairline">
+      <div className="max-w-7xl mx-auto px-6 flex items-baseline justify-between h-16">
+        <div className="flex items-baseline gap-4 self-center">
+          <span className="font-display italic text-2xl text-ink leading-none">
+            Olunia
+          </span>
+          <span className="microcaps text-stone-400">Intranet</span>
         </div>
 
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-slate-300 hidden sm:block">
+        <div className="flex items-baseline gap-6 self-center">
+          <span className="text-xs text-stone-400 hidden sm:block">
             {user?.email}
           </span>
           <button
             onClick={handleSignOut}
-            className="text-sm text-slate-400 hover:text-white transition-colors"
+            className="microcaps text-stone-500 hover:text-ink transition-colors"
           >
             Sign Out
           </button>

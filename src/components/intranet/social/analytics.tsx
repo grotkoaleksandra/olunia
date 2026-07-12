@@ -20,20 +20,36 @@ interface TooltipState {
   lines: string[];
 }
 
-function StatTile({ label, value, detail }: { label: string; value: string; detail?: string }) {
+function StatTile({
+  label,
+  value,
+  detail,
+}: {
+  label: string;
+  value: string;
+  detail?: string;
+}) {
   return (
-    <div className="rounded-xl border border-slate-200 p-5">
-      <div className="text-sm text-slate-500">{label}</div>
-      <div className="text-3xl font-bold text-slate-900 mt-1">{value}</div>
-      {detail && <div className="text-xs text-slate-400 mt-1">{detail}</div>}
+    <div className="py-2">
+      <div className="microcaps text-[10px] text-stone-400">{label}</div>
+      <div className="font-display font-light text-5xl text-ink tabular-nums mt-3 leading-none">
+        {value}
+      </div>
+      {detail && <div className="text-xs text-stone-400 mt-3">{detail}</div>}
     </div>
   );
 }
 
-function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
+function ChartSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="rounded-xl border border-slate-200 p-5">
-      <h2 className="text-sm font-semibold text-slate-700 mb-4">{title}</h2>
+    <div className="border-t border-hairline pt-5">
+      <h2 className="microcaps text-stone-400 mb-6">{title}</h2>
       {children}
     </div>
   );
@@ -43,7 +59,7 @@ function ChartTooltip({ tip }: { tip: TooltipState | null }) {
   if (!tip) return null;
   return (
     <div
-      className="pointer-events-none absolute z-10 rounded-lg bg-slate-900 px-3 py-2 text-xs text-white shadow-lg"
+      className="pointer-events-none absolute z-10 bg-ink px-3 py-2 text-xs text-paper"
       style={{ left: tip.x, top: tip.y, transform: "translate(-50%, -110%)" }}
     >
       {tip.lines.map((line, i) => (
@@ -63,17 +79,21 @@ function PlatformBars({ posts }: { posts: SocialPost[] }) {
   })).filter((p) => p.count > 0);
 
   if (counts.length === 0) {
-    return <p className="text-sm text-slate-400">No posts yet.</p>;
+    return (
+      <p className="font-display italic text-lg text-stone-400">
+        No posts yet.
+      </p>
+    );
   }
 
   const max = Math.max(...counts.map((c) => c.count));
 
   return (
-    <div className="relative space-y-2">
+    <div className="relative space-y-3">
       {counts.map((c) => (
         <div
           key={c.key}
-          className="flex items-center gap-3"
+          className="flex items-center gap-4"
           onMouseMove={(e) => {
             const rect = e.currentTarget.parentElement!.getBoundingClientRect();
             setTip({
@@ -84,19 +104,21 @@ function PlatformBars({ posts }: { posts: SocialPost[] }) {
           }}
           onMouseLeave={() => setTip(null)}
         >
-          <div className="w-20 shrink-0 text-xs text-slate-600 text-right">
+          <div className="w-24 shrink-0 microcaps text-[9px] text-stone-500 text-right">
             {c.label}
           </div>
           <div className="flex-1 h-5 flex items-center">
             <div
-              className="h-4 rounded-r"
+              className="h-3"
               style={{
                 width: `${(c.count / max) * 100}%`,
                 backgroundColor: c.color,
-                minWidth: 4,
+                minWidth: 3,
               }}
             />
-            <span className="ml-2 text-xs text-slate-500">{c.count}</span>
+            <span className="ml-3 text-xs text-ink tabular-nums">
+              {c.count}
+            </span>
           </div>
         </div>
       ))}
@@ -127,7 +149,11 @@ function LineChart({
 
   const visible = series.filter((s) => s.points.length > 0);
   if (visible.length === 0) {
-    return <p className="text-sm text-slate-400">No data recorded yet.</p>;
+    return (
+      <p className="font-display italic text-lg text-stone-400">
+        No data recorded yet.
+      </p>
+    );
   }
 
   const W = 560;
@@ -168,29 +194,30 @@ function LineChart({
               x2={W - PAD.right}
               y1={y(v)}
               y2={y(v)}
-              stroke="#e2e8f0"
+              stroke="#eae7e0"
               strokeWidth={1}
             />
             <text
-              x={PAD.left - 6}
+              x={PAD.left - 8}
               y={y(v) + 3}
               textAnchor="end"
               fontSize={9}
-              fill="#94a3b8"
+              fill="#a8a29e"
             >
               {valueFormat(Math.round(v))}
             </text>
           </g>
         ))}
-        <text
-          x={PAD.left}
-          y={H - 6}
-          fontSize={9}
-          fill="#94a3b8"
-        >
+        <text x={PAD.left} y={H - 6} fontSize={9} fill="#a8a29e">
           {allPoints.find((p) => p.t === minT)?.label}
         </text>
-        <text x={W - PAD.right} y={H - 6} fontSize={9} fill="#94a3b8" textAnchor="end">
+        <text
+          x={W - PAD.right}
+          y={H - 6}
+          fontSize={9}
+          fill="#a8a29e"
+          textAnchor="end"
+        >
           {allPoints.find((p) => p.t === maxT)?.label}
         </text>
 
@@ -208,7 +235,7 @@ function LineChart({
                   x={x(last.t) + 6}
                   y={y(last.value) + 3}
                   fontSize={9}
-                  fill="#475569"
+                  fill="#57534e"
                 >
                   {s.name}
                 </text>
@@ -228,10 +255,7 @@ function LineChart({
                     setTip({
                       x: e.clientX - rect.left,
                       y: e.clientY - rect.top,
-                      lines: [
-                        `${s.name} — ${p.label}`,
-                        valueFormat(p.value),
-                      ],
+                      lines: [`${s.name} — ${p.label}`, valueFormat(p.value)],
                     });
                   }}
                 />
@@ -243,7 +267,7 @@ function LineChart({
                   cy={y(p.value)}
                   r={2.5}
                   fill={s.color}
-                  stroke="#fff"
+                  stroke="#faf9f6"
                   strokeWidth={1}
                   pointerEvents="none"
                 />
@@ -253,11 +277,14 @@ function LineChart({
         })}
       </svg>
       {visible.length > 1 && (
-        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1.5">
           {visible.map((s) => (
-            <span key={s.name} className="flex items-center gap-1.5 text-xs text-slate-600">
+            <span
+              key={s.name}
+              className="flex items-center gap-2 microcaps text-[10px] text-stone-500"
+            >
               <span
-                className="inline-block w-2.5 h-2.5 rounded-full"
+                className="inline-block w-2 h-2 rounded-full"
                 style={{ backgroundColor: s.color }}
               />
               {s.name}
@@ -420,20 +447,23 @@ export function SocialAnalytics() {
   };
 
   if (loading) {
-    return <p className="text-slate-500">Loading analytics...</p>;
+    return <p className="text-sm text-stone-400">Loading analytics…</p>;
   }
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">Analytics</h1>
+      <p className="microcaps text-stone-400 mb-2">Social Media</p>
+      <h1 className="font-display font-light text-5xl text-ink leading-none mb-10">
+        Analytics
+      </h1>
 
       {loadError && (
-        <div className="mb-4 text-sm rounded-lg px-4 py-3 bg-red-50 border border-red-200 text-red-700">
+        <div className="mb-6 text-sm border-l-2 border-ink pl-4 py-1 text-stone-600">
           Could not load data: {loadError}
         </div>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 border-t-2 border-ink mb-14 [&>*]:border-b [&>*]:border-hairline [&>*]:py-6 lg:[&>*:not(:first-child)]:border-l lg:[&>*:not(:first-child)]:border-l-hairline lg:[&>*:not(:first-child)]:pl-8">
         <StatTile
           label="Published posts"
           value={String(published.length)}
@@ -456,34 +486,32 @@ export function SocialAnalytics() {
         />
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-4 mb-6">
-        <ChartCard title="Published posts by platform">
+      <div className="grid lg:grid-cols-2 gap-x-16 gap-y-12 mb-12">
+        <ChartSection title="Published posts by platform">
           <PlatformBars posts={published} />
-        </ChartCard>
+        </ChartSection>
 
-        <ChartCard title="Engagement per month">
+        <ChartSection title="Engagement per month">
           <LineChart
             series={[
               {
                 name: "Engagement",
-                color: "#b45309",
+                color: "#1c1b1a",
                 points: engagementSeries,
               },
             ]}
           />
-        </ChartCard>
-      </div>
+        </ChartSection>
 
-      <div className="grid lg:grid-cols-2 gap-4 mb-6">
-        <ChartCard title="Follower growth">
+        <ChartSection title="Follower growth">
           <LineChart series={followerSeries} />
-          <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-end gap-3">
+          <div className="mt-8 flex flex-wrap items-end gap-8">
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">
+              <label className="microcaps text-[10px] text-stone-500 block mb-1">
                 Platform
               </label>
               <select
-                className="rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="bg-transparent border-0 border-b border-stone-300 px-0 py-2 text-sm text-ink focus:outline-none focus:border-ink transition-colors cursor-pointer"
                 value={followerPlatform}
                 onChange={(e) =>
                   setFollowerPlatform(e.target.value as SocialPlatform)
@@ -497,78 +525,65 @@ export function SocialAnalytics() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">
+              <label className="microcaps text-[10px] text-stone-500 block mb-1">
                 Followers today
               </label>
               <input
                 type="number"
                 min={0}
-                className="w-32 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-32 bg-transparent border-0 border-b border-stone-300 px-0 py-2 text-sm text-ink tabular-nums placeholder:text-stone-300 focus:outline-none focus:border-ink transition-colors"
                 value={followerCount}
                 onChange={(e) => setFollowerCount(e.target.value)}
-                placeholder="e.g. 1250"
+                placeholder="1250"
               />
             </div>
             <button
               onClick={handleRecordFollowers}
               disabled={savingFollowers || followerCount === ""}
-              className="px-4 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white rounded-lg text-sm font-medium transition-colors"
+              className="microcaps bg-ink text-paper px-5 py-2.5 hover:bg-stone-700 disabled:opacity-40 transition-colors"
             >
               Record
             </button>
           </div>
-        </ChartCard>
+        </ChartSection>
 
-        <ChartCard title="Top posts by engagement">
+        <ChartSection title="Top posts by engagement">
           {topPosts.length === 0 ? (
-            <p className="text-sm text-slate-400">
-              Record stats on published posts (Posts tab → Stats) to see your
-              best performers here.
+            <p className="font-display italic text-lg text-stone-400">
+              Record stats on published posts to see your best performers here.
             </p>
           ) : (
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-slate-100">
-                  <th className="text-left text-xs font-medium text-slate-500 py-2">
-                    Post
-                  </th>
-                  <th className="text-right text-xs font-medium text-slate-500 py-2">
-                    Engagement
-                  </th>
-                  <th className="text-right text-xs font-medium text-slate-500 py-2">
-                    Rate
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {topPosts.map(({ post, metric }) => (
-                  <tr
-                    key={post.id}
-                    className="border-b border-slate-50 last:border-b-0"
-                  >
-                    <td className="py-2 text-sm text-slate-900">
-                      <span
-                        className="inline-block w-2 h-2 rounded-full mr-1.5"
-                        style={{
-                          backgroundColor: PLATFORM_META[post.platform].color,
-                        }}
-                      />
-                      {post.title}
-                    </td>
-                    <td className="py-2 text-sm text-slate-700 text-right">
-                      {engagementOf(metric).toLocaleString()}
-                    </td>
-                    <td className="py-2 text-sm text-slate-500 text-right">
-                      {engagementRate(metric) !== null
-                        ? `${engagementRate(metric)!.toFixed(1)}%`
-                        : "—"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <ol className="space-y-0">
+              {topPosts.map(({ post, metric }, i) => (
+                <li
+                  key={post.id}
+                  className="flex items-baseline gap-4 border-b border-hairline py-3.5 last:border-b-0"
+                >
+                  <span className="font-display italic text-stone-300 text-lg w-5 shrink-0">
+                    {i + 1}
+                  </span>
+                  <span
+                    className="inline-block w-2 h-2 rounded-full shrink-0 self-center"
+                    style={{
+                      backgroundColor: PLATFORM_META[post.platform].color,
+                    }}
+                  />
+                  <span className="font-display text-lg text-ink leading-snug flex-1 min-w-0 truncate">
+                    {post.title}
+                  </span>
+                  <span className="text-sm text-ink tabular-nums shrink-0">
+                    {engagementOf(metric).toLocaleString()}
+                  </span>
+                  <span className="text-xs text-stone-400 tabular-nums w-12 text-right shrink-0">
+                    {engagementRate(metric) !== null
+                      ? `${engagementRate(metric)!.toFixed(1)}%`
+                      : "—"}
+                  </span>
+                </li>
+              ))}
+            </ol>
           )}
-        </ChartCard>
+        </ChartSection>
       </div>
 
       <Toast toast={toast} />

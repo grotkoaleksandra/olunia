@@ -91,28 +91,30 @@ export function MetricsModal({
 
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 p-4"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-ink/25 backdrop-blur-[2px] p-4"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md max-h-[90vh] overflow-y-auto bg-paper border border-ink p-8 shadow-[8px_8px_0_rgba(28,27,26,0.12)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-bold text-slate-900 mb-1">Record Stats</h2>
-        <p className="text-sm text-slate-500 mb-4">
-          {PLATFORM_META[post.platform].label} — {post.title}
+        <p className="microcaps text-[10px] text-stone-400 mb-1">
+          {PLATFORM_META[post.platform].label}
         </p>
+        <h2 className="font-display italic text-3xl font-light text-ink mb-8">
+          {post.title}
+        </h2>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-5">
           {FIELDS.map((f) => (
             <div key={f.key}>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="microcaps text-[10px] text-stone-500 block mb-1">
                 {f.label}
               </label>
               <input
                 type="number"
                 min={0}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full bg-transparent border-0 border-b border-stone-300 px-0 py-2 font-display text-xl text-ink tabular-nums focus:outline-none focus:border-ink transition-colors"
                 value={values[f.key]}
                 onChange={(e) =>
                   setValues((prev) => ({
@@ -126,31 +128,37 @@ export function MetricsModal({
         </div>
 
         {latest && (
-          <p className="mt-4 text-xs text-slate-400">
+          <p className="mt-6 text-xs text-stone-400">
             Last recorded{" "}
             {new Date(latest.recorded_at).toLocaleDateString("en", {
               day: "numeric",
               month: "short",
               year: "numeric",
             })}
-            {engagementRate(latest) !== null &&
-              ` — engagement rate ${engagementRate(latest)!.toFixed(1)}%`}
+            {engagementRate(latest) !== null && (
+              <>
+                {" — engagement rate "}
+                <span className="text-ink">
+                  {engagementRate(latest)!.toFixed(1)}%
+                </span>
+              </>
+            )}
           </p>
         )}
 
-        <div className="mt-6 flex justify-end gap-3">
+        <div className="mt-10 flex justify-end items-center gap-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="microcaps text-stone-500 hover:text-ink transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-5 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white rounded-lg text-sm font-medium transition-colors"
+            className="microcaps bg-ink text-paper px-6 py-3 hover:bg-stone-700 disabled:opacity-40 transition-colors"
           >
-            {saving ? "Saving..." : "Save snapshot"}
+            {saving ? "Saving…" : "Save snapshot"}
           </button>
         </div>
       </div>

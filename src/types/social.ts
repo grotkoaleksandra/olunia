@@ -76,13 +76,6 @@ export const STATUSES: { key: SocialPostStatus; label: string }[] = [
   { key: "published", label: "Published" },
 ];
 
-export const STATUS_STYLES: Record<SocialPostStatus, string> = {
-  idea: "bg-slate-100 text-slate-600",
-  draft: "bg-amber-50 text-amber-700",
-  scheduled: "bg-blue-50 text-blue-700",
-  published: "bg-green-50 text-green-700",
-};
-
 /** Sum of interactions used as the engagement numerator. */
 export function engagementOf(m: SocialMetric): number {
   return m.likes + m.comments + m.shares + m.saves;

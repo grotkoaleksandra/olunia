@@ -91,71 +91,73 @@ export function SocialCalendar() {
     }
   };
 
-  const monthLabel = new Date(year, month, 1).toLocaleDateString("en", {
+  const monthName = new Date(year, month, 1).toLocaleDateString("en", {
     month: "long",
-    year: "numeric",
   });
   const todayKey = localDateKey(today);
 
   if (loading) {
-    return <p className="text-slate-500">Loading calendar...</p>;
+    return <p className="text-sm text-stone-400">Loading calendar…</p>;
   }
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">Content Calendar</h1>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => moveMonth(-1)}
-            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
-            aria-label="Previous month"
-          >
-            ←
-          </button>
-          <span className="text-sm font-medium text-slate-900 w-36 text-center">
-            {monthLabel}
-          </span>
-          <button
-            onClick={() => moveMonth(1)}
-            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
-            aria-label="Next month"
-          >
-            →
-          </button>
-          <button
-            onClick={() => openNew(null)}
-            className="ml-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-medium transition-colors"
-          >
-            + New Post
-          </button>
+      <p className="microcaps text-stone-400 mb-2">Social Media</p>
+      <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
+        <div className="flex items-baseline gap-5">
+          <h1 className="font-display font-light text-5xl text-ink leading-none">
+            {monthName}{" "}
+            <span className="italic text-stone-400">{year}</span>
+          </h1>
+          <div className="flex items-center gap-1 text-lg">
+            <button
+              onClick={() => moveMonth(-1)}
+              className="px-2 text-stone-400 hover:text-ink transition-colors"
+              aria-label="Previous month"
+            >
+              ←
+            </button>
+            <button
+              onClick={() => moveMonth(1)}
+              className="px-2 text-stone-400 hover:text-ink transition-colors"
+              aria-label="Next month"
+            >
+              →
+            </button>
+          </div>
         </div>
+        <button
+          onClick={() => openNew(null)}
+          className="microcaps bg-ink text-paper px-6 py-3 hover:bg-stone-700 transition-colors"
+        >
+          New Post
+        </button>
       </div>
 
       {error && (
-        <div className="mb-4 text-sm rounded-lg px-4 py-3 bg-red-50 border border-red-200 text-red-700">
+        <div className="mb-6 text-sm border-l-2 border-ink pl-4 py-1 text-stone-600">
           Could not load posts: {error}
         </div>
       )}
 
-      <div className="rounded-xl border border-slate-200 overflow-hidden">
-        <div className="grid grid-cols-7 bg-slate-50 border-b border-slate-200">
+      <div className="border-t border-hairline">
+        <div className="grid grid-cols-7">
           {WEEKDAYS.map((day) => (
             <div
               key={day}
-              className="px-2 py-2 text-center text-xs font-medium text-slate-500"
+              className="py-3 text-center microcaps text-[10px] text-stone-400"
             >
               {day}
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-7">
+        <div className="grid grid-cols-7 border-l border-hairline">
           {cells.map((date, i) => {
             if (!date) {
               return (
                 <div
                   key={i}
-                  className="min-h-24 border-b border-r border-slate-100 bg-slate-50/50"
+                  className="min-h-28 border-b border-r border-hairline bg-stone-50/50"
                 />
               );
             }
@@ -166,18 +168,23 @@ export function SocialCalendar() {
               <div
                 key={i}
                 onClick={() => openNew(key)}
-                className="min-h-24 border-b border-r border-slate-100 p-1.5 cursor-pointer hover:bg-amber-50/50 transition-colors"
+                className="group min-h-28 border-b border-r border-hairline p-2 cursor-pointer hover:bg-white transition-colors"
               >
-                <div
-                  className={`text-xs mb-1 w-6 h-6 flex items-center justify-center rounded-full ${
-                    isToday
-                      ? "bg-amber-600 text-white font-bold"
-                      : "text-slate-500"
-                  }`}
-                >
-                  {date.getDate()}
+                <div className="flex items-center justify-between mb-1.5">
+                  <span
+                    className={`text-xs tabular-nums w-6 h-6 flex items-center justify-center ${
+                      isToday
+                        ? "bg-ink text-paper rounded-full"
+                        : "text-stone-400"
+                    }`}
+                  >
+                    {date.getDate()}
+                  </span>
+                  <span className="text-stone-300 opacity-0 group-hover:opacity-100 transition-opacity text-sm leading-none">
+                    +
+                  </span>
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   {dayPosts.map((post) => (
                     <button
                       key={post.id}
@@ -185,11 +192,11 @@ export function SocialCalendar() {
                         e.stopPropagation();
                         openEdit(post);
                       }}
-                      className={`block w-full truncate rounded px-1.5 py-0.5 text-left text-xs text-white ${
-                        post.status === "published" ? "opacity-60" : ""
+                      className={`block w-full truncate border-l-2 pl-1.5 text-left text-[11px] leading-tight text-ink hover:underline underline-offset-2 ${
+                        post.status === "published" ? "opacity-45" : ""
                       }`}
                       style={{
-                        backgroundColor: PLATFORM_META[post.platform].color,
+                        borderLeftColor: PLATFORM_META[post.platform].color,
                       }}
                       title={`${PLATFORM_META[post.platform].label}: ${post.title}`}
                     >
@@ -203,11 +210,14 @@ export function SocialCalendar() {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1">
+      <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
         {PLATFORMS.map((p) => (
-          <span key={p.key} className="flex items-center gap-1.5 text-xs text-slate-600">
+          <span
+            key={p.key}
+            className="flex items-center gap-2 microcaps text-[10px] text-stone-500"
+          >
             <span
-              className="inline-block w-2.5 h-2.5 rounded-full"
+              className="inline-block w-2 h-2 rounded-full"
               style={{ backgroundColor: p.color }}
             />
             {p.label}
@@ -216,22 +226,26 @@ export function SocialCalendar() {
       </div>
 
       {unscheduled.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-sm font-semibold text-slate-700 mb-2">
-            Not scheduled yet ({unscheduled.length})
+        <div className="mt-14 border-t border-hairline pt-6">
+          <h2 className="microcaps text-stone-400 mb-4">
+            Not yet scheduled — {unscheduled.length}
           </h2>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-x-8 gap-y-3">
             {unscheduled.map((post) => (
               <button
                 key={post.id}
                 onClick={() => openEdit(post)}
-                className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 hover:border-amber-400 hover:bg-amber-50/50 transition-colors"
+                className="group flex items-center gap-2 text-sm text-ink"
               >
                 <span
-                  className="inline-block w-2 h-2 rounded-full mr-2"
-                  style={{ backgroundColor: PLATFORM_META[post.platform].color }}
+                  className="inline-block w-2 h-2 rounded-full"
+                  style={{
+                    backgroundColor: PLATFORM_META[post.platform].color,
+                  }}
                 />
-                {post.title}
+                <span className="font-display text-base group-hover:italic">
+                  {post.title}
+                </span>
               </button>
             ))}
           </div>

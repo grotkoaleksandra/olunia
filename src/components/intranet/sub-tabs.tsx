@@ -37,27 +37,30 @@ export function SubTabs() {
 
   const activeTab = getActiveTab();
 
+  const linkClass = (isActive: boolean) =>
+    `font-display text-lg py-3 whitespace-nowrap transition-colors ${
+      isActive
+        ? "text-ink italic underline underline-offset-8 decoration-1"
+        : "text-stone-400 hover:text-ink"
+    }`;
+
   if (loading) {
     return (
-      <div className="bg-slate-100 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 h-10" />
+      <div className="bg-paper">
+        <div className="max-w-7xl mx-auto px-6 h-12" />
       </div>
     );
   }
 
   return (
-    <div className="bg-slate-100 border-b border-slate-200">
+    <div className="bg-paper">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center gap-1 overflow-x-auto">
+        <div className="flex items-center gap-8 overflow-x-auto">
           {visibleTabs.map((tab) => (
             <Link
               key={tab.tab_key}
               href={`/${lang}/intranet/${activeSection}/${tab.tab_key}`}
-              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
-                activeTab === tab.tab_key
-                  ? "text-amber-700 border-b-2 border-amber-600"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
+              className={linkClass(activeTab === tab.tab_key)}
             >
               {tab.tab_label}
             </Link>
@@ -65,11 +68,7 @@ export function SubTabs() {
           {activeSection === "admin" && (
             <Link
               href={`/${lang}/intranet/admin/page-display`}
-              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
-                isPageDisplayActive
-                  ? "text-amber-700 border-b-2 border-amber-600"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
+              className={linkClass(isPageDisplayActive)}
             >
               Page Display
             </Link>
