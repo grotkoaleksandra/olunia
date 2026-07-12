@@ -1,9 +1,9 @@
 {
-  "version": "v260712.03 8:43am",
-  "release": 3,
-  "sha": "b69066a",
-  "fullSha": "b69066a13f43fc982874c23c127f7aa1261d4afc",
+  "version": "v260712.04 8:43am",
+  "release": 4,
+  "sha": "d42d4a5",
+  "fullSha": "d42d4a5729fd099d78aeded9d60480971da2eeac",
   "actor": "grotkoaleksandra",
-  "pushedAt": "2026-07-12T13:43:09Z",
-  "commits": [{"sha": "b69066a", "message": "design: editorial redesign of intranet and social media section", "author": "MICHAEL KARNOW"}]
+  "pushedAt": "2026-07-12T13:43:40Z",
+  "commits": [{"sha": "d42d4a5", "message": "chore: remove stray duplicate files", "author": "MICHAEL KARNOW"}]
 }
