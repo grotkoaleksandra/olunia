@@ -1,9 +1,9 @@
 {
-  "version": "v260712.05 11:02am",
-  "release": 5,
-  "sha": "ef70b51",
-  "fullSha": "ef70b51aaffd89f88db6ca1ceea5ebf95f323671",
+  "version": "v260712.06 11:15am",
+  "release": 6,
+  "sha": "088cf04",
+  "fullSha": "088cf04d00011aa0085a497a4ecde82d82cb250d",
   "actor": "grotkoaleksandra",
-  "pushedAt": "2026-07-12T16:02:47Z",
-  "commits": [{"sha": "ef70b51", "message": "feat: make the site an installable PWA with mobile agenda calendar", "author": "MICHAEL KARNOW"}]
+  "pushedAt": "2026-07-12T16:15:57Z",
+  "commits": [{"sha": "088cf04", "message": "feat: weekly plan with monthly repeat onto the calendar", "author": "MICHAEL KARNOW"}]
 }
