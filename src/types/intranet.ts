@@ -1,4 +1,5 @@
 export type IntranetSection =
+  | "social"
   | "devices"
   | "residents"
   | "associates"
@@ -24,6 +25,7 @@ export interface SectionDefinition {
 }
 
 export const SECTIONS: SectionDefinition[] = [
+  { key: "social", label: "Social Media" },
   { key: "devices", label: "Devices" },
   { key: "residents", label: "Residents" },
   { key: "associates", label: "Associates" },
@@ -32,6 +34,11 @@ export const SECTIONS: SectionDefinition[] = [
 ];
 
 export const DEFAULT_TABS: Record<IntranetSection, TabDefinition[]> = {
+  social: [
+    { key: "calendar", label: "Calendar", defaultVisible: true },
+    { key: "posts", label: "Posts", defaultVisible: true },
+    { key: "analytics", label: "Analytics", defaultVisible: true },
+  ],
   devices: [
     { key: "inventory", label: "Inventory", defaultVisible: true },
     { key: "assignments", label: "Assignments", defaultVisible: true },
@@ -69,6 +76,7 @@ export const DEFAULT_TABS: Record<IntranetSection, TabDefinition[]> = {
 };
 
 export const ALL_TAB_SLUGS: Record<IntranetSection, string[]> = {
+  social: DEFAULT_TABS.social.map((t) => t.key),
   devices: DEFAULT_TABS.devices.map((t) => t.key),
   residents: DEFAULT_TABS.residents.map((t) => t.key),
   associates: DEFAULT_TABS.associates.map((t) => t.key),
