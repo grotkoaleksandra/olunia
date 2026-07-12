@@ -8,3 +8,7 @@ node_modules/
 out/
 .claude/worktrees/
 CLAUDE.local.md
+
+# macOS/iCloud duplicate-file artifacts
+* 2.*
+* 3.*
