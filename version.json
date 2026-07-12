@@ -1,9 +1,9 @@
 {
-  "version": "v260310.02 10:18am",
-  "release": 2,
-  "sha": "b9b4a2c",
-  "fullSha": "b9b4a2c9acce4bb1e2d67d25b9676c8973c1c0d7",
+  "version": "v260712.01 8:16am",
+  "release": 1,
+  "sha": "c22adbb",
+  "fullSha": "c22adbbab7249b4dbeecd2fac94202982bdd85f8",
   "actor": "grotkoaleksandra",
-  "pushedAt": "2026-03-10T15:18:56Z",
-  "commits": [{"sha": "b9b4a2c", "message": "feat: add Resend email edge function for contact notifications", "author": "MICHAEL KARNOW"}]
+  "pushedAt": "2026-07-12T13:16:11Z",
+  "commits": [{"sha": "c22adbb", "message": "feat: add social media harmonogram with calendar, post tracking, and analytics", "author": "MICHAEL KARNOW"}]
 }
