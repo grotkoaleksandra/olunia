@@ -32,7 +32,9 @@ Olunia is a personal portfolio for Ola — designer, UI/UX developer, and artist
 
 ## Deployment
 
-Push to main and it's live. No build step, no PR process.
+Push to main; the "Deploy to GitHub Pages" Action builds the Next.js static
+export (`NEXT_PUBLIC_BASE_PATH=/olunia`) and publishes it — live ~2 minutes
+after push. No PR process.
 **For Claude:** Always push changes immediately.
 
 ## Database Schema
@@ -45,6 +47,15 @@ Contact form submissions — name, email, subject, message, is_read
 
 ### `page_display_config`
 Intranet tab visibility — section, tab_key, tab_label, is_visible, sort_order
+
+### `social_posts`
+Social media harmonogram — title, content, platform, status (idea/draft/scheduled/published), scheduled_at, published_at, post_url, tags[], notes
+
+### `social_metrics`
+Per-post engagement snapshots (manually recorded) — post_id, likes, comments, shares, saves, impressions, reach, clicks, recorded_at
+
+### `social_account_stats`
+Follower-count snapshots per platform for growth tracking — platform, followers, recorded_at
 
 ## Shared Files
 
